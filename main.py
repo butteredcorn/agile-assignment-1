@@ -38,4 +38,4 @@ reminder1 = reminders.Reminder(reminderText, reminderTag)
 store.addReminder(reminder1)
 print(store.reminders)
 
-app.searchDatabase("some tag")
+app.searchDatabase(None, None, "a")
