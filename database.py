@@ -1,16 +1,31 @@
 import reminders
 
 class Store:
+
     def __init__(self):
         self.__reminders = []
 
     #reminder array
     @property
     def reminders(self):
-        cache = []
+        dict_cache = []
         for reminder in self.__reminders:
-            cache.append(reminder.__dict__)
-            return cache
+            dict_cache.append(reminder.__dict__)
+        #return __dict__ just for display purposes
+        return dict_cache #in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
 
     def addReminder(self, reminder):
         self.__reminders.append(reminder)
+
+
+    #[{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
+    def search(self, tag = None, text = None, both = None):
+        if tag is None and text is None and both is None:
+            raise ValueError("Non-Permissible Search Parameters: Not all three fields can be None.")
+        elif (tag):
+            searchCache = []
+            for reminder in self.__reminders:
+                if reminder._Reminder__tags == tag:
+                    searchCache.append(reminder.__dict__)
+            return searchCache #return __dict__ just for display purposes
+
