@@ -25,6 +25,8 @@ class Store:
         elif (tag):
             searchCache = []
             for reminder in self.__reminders:
+
+                #need to allow for multiple tags/search within search
                 if reminder._Reminder__tags == tag:
                     searchCache.append(reminder.__dict__)
             return searchCache #return __dict__ just for display purposes
@@ -44,5 +46,10 @@ class Store:
                     searchCache.append(reminder.__dict__)
             return searchCache
 
-            
+    def searchByID(self, reminderID):
+        if reminderID and isinstance(int(reminderID), int):
+            for reminder in self.__reminders:
+                if reminder._id == int(reminderID):
+                    return reminder
+
 

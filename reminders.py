@@ -17,6 +17,7 @@ class Reminder(resource_cl):
         self.__text = text
         self.__tags = tags
 
+
     #text attribute
     @property
     def text(self):
@@ -26,6 +27,7 @@ class Reminder(resource_cl):
     def text(self, value):
         self.__text = value
 
+
     #tags attribute
     @property
     def tags(self):
@@ -34,6 +36,7 @@ class Reminder(resource_cl):
     @tags.setter
     def tags(self, value):
         self.__tags = value
+
 
     #auto-incrementing id attribute
     @property
