@@ -9,17 +9,22 @@ class ReminderEngine:
         pass
 
     def remindersMenu(self):
-        print('\nReminders menu:\n')
-        print('1. show all reminders')
-        print('2. search reminders')
-        print('3. add reminders')
-        print('4. modify reminders')
-        print('5. export reminders')
-        print('6. import reminders')
-        print('7. quit\n')
+        print('\n    Reminders menu:\n')
+        print('    1. show all reminders')
+        print('    2. search reminders')
+        print('    3. add reminders')
+        print('    4. modify reminders')
+        print('    5. export reminders')
+        print('    6. import reminders')
+        print('    7. quit\n')
 
     def getReminderList(self):
-        print(store.reminders)
+        if store.reminders == []:
+            print("\nYou don't have any reminders! Create some with option 3.")
+        else:
+            print("")
+            for eachReminder in store.reminders:
+                print(f"{eachReminder}")
 
     def querySearchParameter(self):
         searchParameter = input("How would you like to search, by 1: tag, 2: text, or 3: both? ")
@@ -40,7 +45,7 @@ class ReminderEngine:
 
     def createReminder(self):
         #ask for user inputted reminder description
-        reminderText = input('Create a reminder: ')
+        reminderText = input('Create a reminder description: ')
 
         #ask for user inputted tags for reminder
         reminderTags = input('Add some tags? Separate tags with a comma: ')
@@ -53,23 +58,23 @@ class ReminderEngine:
 
         #store new reminder in Store in database.py
         store.addReminder(newReminder)
-        print(f"New reminder with description '{newReminder.text}' added with ID {newReminder.id}!")
+        print(f"\nNew reminder with description '{newReminder.text}' added with ID {newReminder.id}!")
 
 
     def modifyReminderByID(self):
         selectedID = input('Please enter the reminder ID: ')
         selectedReminder = store.searchByID(selectedID)
         #print(selectedReminder.__dict__)
-        print(f"Currently, reminder {selectedReminder.id} is set to '{selectedReminder.text}'.")
+        print(f"\nCurrently, reminder {selectedReminder.id} is set to '{selectedReminder.text}'.")
 
         newDescription = input("Please enter the new description: ")
         selectedReminder.text = newDescription
-        print(f"Reminder {selectedReminder.id}'s description has been updated to '{selectedReminder.text}'.")
+        print(f"\nReminder {selectedReminder.id}'s description has been updated to '{selectedReminder.text}'.")
 
         newTags = input('Please enter new tags: ')
         if newTags != "":
             selectedReminder.tags = newTags
-            print(f"Reminder {selectedReminder.id}'s tags has been updated to '{selectedReminder.tags}'.")
+            print(f"\nReminder {selectedReminder.id}'s tags has been updated to '{selectedReminder.tags}'.")
         else:
             print("Tags were not updated.")
         
@@ -77,16 +82,35 @@ class ReminderEngine:
 #initialize application
 app = ReminderEngine()
 store = database.Store()
+appOn = True
 
-#application start
-app.remindersMenu()
+while(appOn):
+    app.remindersMenu()
+    userSelection = input("Select option: ")
 
+    #show all reminders
+    if userSelection == '1':
+        app.getReminderList()
 
+    #search reminders
+    elif userSelection == '2':
+        app.querySearchParameter()
 
-app.createReminder()
+    #add reminders
+    elif userSelection == '3':
+        app.createReminder()
 
-app.getReminderList()
+    #modify reminders
+    elif userSelection == '4':
+        app.modifyReminderByID()
 
-app.querySearchParameter()
-
-#app.modifyReminderByID()
+    #export reminders
+    elif userSelection == '5':
+        continue
+    #import reminders
+    elif userSelection == '6':
+        continue
+    #quit
+    elif userSelection == '7':
+        appOn = False
+        print("Have a good day.")
