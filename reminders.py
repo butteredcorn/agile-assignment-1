@@ -4,8 +4,9 @@ import itertools
 class resource_cl():
     id_generator = itertools.count()
 
-    # def setGenerator(newCount):
-    #     id_generator = itertools.count(newCount)
+    @classmethod
+    def setGenerator(cls, newCount):
+        id_generator = itertools.count(newCount)
 
     def __init__(self):
         self._id = next(self.id_generator)
