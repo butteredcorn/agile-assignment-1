@@ -30,7 +30,6 @@ class ReminderEngine:
         searchParameter = input("How would you like to search, by 1: tag, 2: text, or 3: both? ")
         if searchParameter == "1":
             searchTerm = input("Please enter the name of the tag: ")
-            #print(searchTerm)
             self.searchDatabase(searchTerm)
         elif searchParameter == "2":
             searchTerm = input("Please enter the exact word or phrase you would like to search: ")
@@ -38,6 +37,9 @@ class ReminderEngine:
         elif searchParameter == "3":
             searchTerm = input("Please enter the name of the tag or the exact word or phase you would like to earch: ")
             self.searchDatabase(None, None, searchTerm)
+        else:
+            print("Please enter a valid option.")
+            self.querySearchParameter()
 
     #if all args are None, raise Error
     def searchDatabase(self, tag = None, text = None, both = None):
@@ -77,6 +79,27 @@ class ReminderEngine:
             print(f"\nReminder {selectedReminder.id}'s tags has been updated to '{selectedReminder.tags}'.")
         else:
             print("Tags were not updated.")
+
+    def exportReminders(self):
+        fileName = input("Filename to save to? Do not enter any extension: ")
+        if '.' in fileName:
+            print("Please enter a valid filename.")
+        else:
+            try:
+                store.exportToPickle(fileName)
+                print(f"Reminders have been exported to {fileName}.pickle.")
+            except:
+                print(f"Sorry, but we could not write to '{fileName}'")
+
+    def importReminders(self):
+        fileName = input("Filename to open from? Do not enter any extension: ")
+
+        try:
+            store.importFromPickle(fileName)
+            print(f"Reminders have been imported from {fileName}.pickle.")
+        except:
+             print(f"\n The file '{fileName}' does not appear to exist.")
+        
         
 
 #initialize application
@@ -106,11 +129,14 @@ while(appOn):
 
     #export reminders
     elif userSelection == '5':
-        continue
+        app.exportReminders()
     #import reminders
     elif userSelection == '6':
-        continue
+        app.importReminders()
     #quit
     elif userSelection == '7':
         appOn = False
         print("Have a good day.")
+
+    else:
+        print("Please choose one of the seven options provided.")

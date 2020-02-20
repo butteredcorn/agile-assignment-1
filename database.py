@@ -1,4 +1,6 @@
 import reminders
+import pickle
+
 
 class Store:
 
@@ -52,5 +54,21 @@ class Store:
             for reminder in self.__reminders:
                 if reminder._id == int(reminderID):
                     return reminder
+
+    def exportToPickle(self, fileName):
+        #to pickle out
+        pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
+        pickle.dump(self.__reminders, pickle_out)
+        pickle_out.close()
+
+    #need to fix merge conflict with ids
+    def importFromPickle(self, fileName):
+        pickle_in = open(f"{fileName}.pickle", "rb") #rb = readable
+        importedReminders = pickle.load(pickle_in)
+        #print(importedReminders)
+        for reminder in importedReminders:
+            self.__reminders.append(reminder)
+
+
 
 
