@@ -84,13 +84,6 @@ class Store:
 
         nextID = currentHighestLocalID + 1
 
-        # setCache = {}
-        # for localReminder in self.__reminders:
-        #     setCache[[localReminder._id, localReminder._Reminder__text, localReminder._Reminder__tags]] = True
-
-        # for importedReminder in importedReminders:
-        #     setCache[[importedReminder._id, importedReminder._Reminder__text, importedReminder._Reminder__tags]] = True
-
         setCache = []
 
         if len(self.__reminders) != 0:
@@ -104,7 +97,6 @@ class Store:
                     if importedReminder._id == localReminder._id:
                         if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
                             #exact duplicate identified
-                            #importedReminders.remove(importedReminder)
                             continue
                         else:
                             #conflicting ids, but different reminders
@@ -118,22 +110,6 @@ class Store:
         
         print(setCache)
         self.__reminders = setCache
-
-        # for importedReminder in importedReminders:
-        #     for localReminder in self.__reminders:
-        #         #id conflict identified
-        #         if importedReminder._id == localReminder._id:
-        #             if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
-        #                 #exact duplicate identified
-        #                 importedReminders.remove(importedReminder)
-        #             else:
-        #                 #conflicting ids, but different reminders
-        #                 localReminder._id = nextID
-        #                 nextID = nextID + 1
-
-
-        # for reminder in setCache:
-        #     self.__reminders.append(reminder)
         
         #sync up the auto-incrementingID generator
         reminders.resource_cl.id_generator = itertools.count(nextID)
