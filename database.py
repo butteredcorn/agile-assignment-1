@@ -25,17 +25,18 @@ class Store:
         elif (tag):
             searchCache = []
             for reminder in self.__reminders:
-
-                #need to allow for multiple tags/search within search
-                if reminder._Reminder__tags == tag:
-                    searchCache.append(reminder.__dict__)
+                for eachTag in reminder._Reminder__tags:
+                    if eachTag == tag:
+                        searchCache.append(reminder.__dict__)    
             return searchCache #return __dict__ just for display purposes
+
         elif (text):
             searchCache = []
             for reminder in self.__reminders:
                 if text in reminder._Reminder__text:
                     searchCache.append(reminder.__dict__)
             return searchCache #return __dict__ just for display purposes
+
         elif (both):
             #note that both is the search term, the option to choose both is handled in the ReminderEngine
             searchCache = []

@@ -39,13 +39,22 @@ class ReminderEngine:
         print(store.search(tag, text, both))
 
     def createReminder(self):
+        #ask for user inputted reminder description
         reminderText = input('Create a reminder: ')
 
-        #need to allow for delimination of tags
-        reminderTag = input('Add some tags?')
-        newReminder = reminders.Reminder(reminderText, reminderTag)
+        #ask for user inputted tags for reminder
+        reminderTags = input('Add some tags? Separate tags with a comma: ')
+        if reminderTags == "":
+            reminderTags = None
+        formattedTags = [tag.strip() for tag in reminderTags.split(',')]
+
+        #create reminder by calling Reminder in reminders.py
+        newReminder = reminders.Reminder(reminderText, formattedTags)
+
+        #store new reminder in Store in database.py
         store.addReminder(newReminder)
         print(f"New reminder with description '{newReminder.text}' added with ID {newReminder.id}!")
+
 
     def modifyReminderByID(self):
         selectedID = input('Please enter the reminder ID: ')
@@ -55,12 +64,12 @@ class ReminderEngine:
 
         newDescription = input("Please enter the new description: ")
         selectedReminder.text = newDescription
-        print(f"Reminder {selectedReminder.id} has been updated to '{selectedReminder.text}'.")
+        print(f"Reminder {selectedReminder.id}'s description has been updated to '{selectedReminder.text}'.")
 
         newTags = input('Please enter new tags: ')
         if newTags != "":
             selectedReminder.tags = newTags
-            print(f"Reminder {selectedReminder.id} has been updated to '{selectedReminder.text}'.")
+            print(f"Reminder {selectedReminder.id}'s tags has been updated to '{selectedReminder.tags}'.")
         else:
             print("Tags were not updated.")
         
@@ -78,6 +87,6 @@ app.createReminder()
 
 app.getReminderList()
 
-#app.querySearchParameter()
+app.querySearchParameter()
 
-app.modifyReminderByID()
+#app.modifyReminderByID()
