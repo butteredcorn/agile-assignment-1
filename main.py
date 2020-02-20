@@ -45,12 +45,25 @@ class ReminderEngine:
         reminderTag = input('Add some tags?')
         newReminder = reminders.Reminder(reminderText, reminderTag)
         store.addReminder(newReminder)
-        print(f"New reminder titled {newReminder.text} added with ID {newReminder.id}!")
+        print(f"New reminder with description '{newReminder.text}' added with ID {newReminder.id}!")
 
     def modifyReminderByID(self):
         selectedID = input('Please enter the reminder ID: ')
         selectedReminder = store.searchByID(selectedID)
         #print(selectedReminder.__dict__)
+        print(f"Currently, reminder {selectedReminder.id} is set to '{selectedReminder.text}'.")
+
+        newDescription = input("Please enter the new description: ")
+        selectedReminder.text = newDescription
+        print(f"Reminder {selectedReminder.id} has been updated to '{selectedReminder.text}'.")
+
+        newTags = input('Please enter new tags: ')
+        if newTags != "":
+            selectedReminder.tags = newTags
+            print(f"Reminder {selectedReminder.id} has been updated to '{selectedReminder.text}'.")
+        else:
+            print("Tags were not updated.")
+        
 
 #initialize application
 app = ReminderEngine()
