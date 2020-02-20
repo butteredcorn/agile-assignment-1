@@ -1,5 +1,10 @@
-import reminders
 import pickle
+import importlib
+import itertools
+
+
+reminders = importlib.import_module('reminders')
+
 
 
 class Store:
@@ -56,15 +61,21 @@ class Store:
                     return reminder
 
     def exportToPickle(self, fileName):
-        #to pickle out
+        cacheOut = []
         pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
-        pickle.dump(self.__reminders, pickle_out)
+        for reminder in self.__reminders:
+            print(reminder)
+            cacheOut.append(reminder)
+        pickle.dump(cacheOut, pickle_out)
         pickle_out.close()
 
-    #need to fix merge conflict with ids
     def importFromPickle(self, fileName):
         pickle_in = open((f"{fileName}.pickle"), "rb") #rb = readable
         importedReminders = pickle.load(pickle_in)
+
+        for reminder in importedReminders:
+            print(reminder)
+        print(importedReminders)
 
         if self.__reminders == []:
             currentHighestLocalID = 0
@@ -73,21 +84,59 @@ class Store:
 
         nextID = currentHighestLocalID + 1
 
-        for importedReminder in importedReminders:
-            for localReminder in self.__reminders:
-                #id conflict identified
-                if importedReminder._id == localReminder._id:
-                    if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
-                        #exact duplicate identified
-                        importedReminders.remove(importedReminder)
-                    else:
-                        #conflicting ids, but different reminders
-                        localReminder._id = nextID
-                        nextID = nextID + 1
+        # setCache = {}
+        # for localReminder in self.__reminders:
+        #     setCache[[localReminder._id, localReminder._Reminder__text, localReminder._Reminder__tags]] = True
 
-        #print(importedReminders)
-        for reminder in importedReminders:
-            self.__reminders.append(reminder)
+        # for importedReminder in importedReminders:
+        #     setCache[[importedReminder._id, importedReminder._Reminder__text, importedReminder._Reminder__tags]] = True
+
+        setCache = []
+
+        if len(self.__reminders) != 0:
+            for localReminder in self.__reminders:
+                setCache.append(localReminder)
+
+        
+        if len(setCache) != 0:
+            for importedReminder in importedReminders:
+                for localReminder in setCache:
+                    if importedReminder._id == localReminder._id:
+                        if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
+                            #exact duplicate identified
+                            #importedReminders.remove(importedReminder)
+                            continue
+                        else:
+                            #conflicting ids, but different reminders
+                            localReminder._id = nextID
+                            setCache.append(importedReminder)
+                            nextID = nextID + 1
+        else:
+            for importedReminder in importedReminders:
+                print(importedReminder)
+                setCache.append(importedReminder)
+        
+        print(setCache)
+        self.__reminders = setCache
+
+        # for importedReminder in importedReminders:
+        #     for localReminder in self.__reminders:
+        #         #id conflict identified
+        #         if importedReminder._id == localReminder._id:
+        #             if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
+        #                 #exact duplicate identified
+        #                 importedReminders.remove(importedReminder)
+        #             else:
+        #                 #conflicting ids, but different reminders
+        #                 localReminder._id = nextID
+        #                 nextID = nextID + 1
+
+
+        # for reminder in setCache:
+        #     self.__reminders.append(reminder)
+        
+        #sync up the auto-incrementingID generator
+        reminders.resource_cl.id_generator = itertools.count(nextID)
 
 
 

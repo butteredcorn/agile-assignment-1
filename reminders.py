@@ -1,9 +1,11 @@
-import database
 import itertools
 
 #generate unique id
 class resource_cl():
     id_generator = itertools.count()
+
+    # def setGenerator(newCount):
+    #     id_generator = itertools.count(newCount)
 
     def __init__(self):
         self._id = next(self.id_generator)
@@ -48,12 +50,3 @@ class Reminder(resource_cl):
     def id(self, value):
         self._id = value
 
-
-
-
-
-
-# reminder1 = Reminder("hello world")
-
-# print(reminder1.__dict__)
-# print(reminder1.id)
