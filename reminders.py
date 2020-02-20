@@ -43,6 +43,11 @@ class Reminder(resource_cl):
     def id(self):
         return self._id
 
+    #for import merge conflict on ids
+    @id.setter
+    def id(self, value):
+        self._id = value
+
 
 
 

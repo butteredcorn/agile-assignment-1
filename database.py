@@ -63,8 +63,28 @@ class Store:
 
     #need to fix merge conflict with ids
     def importFromPickle(self, fileName):
-        pickle_in = open(f"{fileName}.pickle", "rb") #rb = readable
+        pickle_in = open((f"{fileName}.pickle"), "rb") #rb = readable
         importedReminders = pickle.load(pickle_in)
+
+        if self.__reminders == []:
+            currentHighestLocalID = 0
+        else:
+            currentHighestLocalID = int((self.__reminders[-1])._id)
+
+        nextID = currentHighestLocalID + 1
+
+        for importedReminder in importedReminders:
+            for localReminder in self.__reminders:
+                #id conflict identified
+                if importedReminder._id == localReminder._id:
+                    if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
+                        #exact duplicate identified
+                        importedReminders.remove(importedReminder)
+                    else:
+                        #conflicting ids, but different reminders
+                        localReminder._id = nextID
+                        nextID = nextID + 1
+
         #print(importedReminders)
         for reminder in importedReminders:
             self.__reminders.append(reminder)

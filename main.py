@@ -93,7 +93,7 @@ class ReminderEngine:
 
     def importReminders(self):
         fileName = input("Filename to open from? Do not enter any extension: ")
-
+        #store.importFromPickle(fileName)
         try:
             store.importFromPickle(fileName)
             print(f"Reminders have been imported from {fileName}.pickle.")
