@@ -64,3 +64,8 @@ def test_searchByID_withInt():
 def test_search_throwsEmptyString():
     with pytest.raises(Exception) as e_info:
         store.search("", None, None)
+
+#test that exportToPickle handles empty strings, throws value error
+def test_exportToPickle_throwsEmptyString():
+    with pytest.raises(Exception) as e_info:
+        store.exportToPickle("")

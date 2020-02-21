@@ -71,6 +71,8 @@ class Store:
 
     #export Store list to root directory as pickle file
     def exportToPickle(self, fileName):
+        if fileName == "":
+            raise ValueError("Filename cannot be of type empty string.")
         cacheOut = []
         pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
         for reminder in self.__reminders:

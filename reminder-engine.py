@@ -127,9 +127,9 @@ class ReminderEngine:
         else:
             try:
                 store.exportToPickle(fileName)
-                print(f"Reminders have been exported to {fileName}.pickle.")
+                print(f"\nReminders have been exported to {fileName}.pickle.")
             except:
-                print(f"Sorry, but we could not write to '{fileName}'")
+                print(f"\nSorry, but we could not write to '{fileName}'")
 
     #ask for user input for filename and import from pickle file
     def importReminders(self):
