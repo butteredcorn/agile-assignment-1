@@ -1,7 +1,7 @@
 import pickle
 import importlib
 import itertools
-
+from operator import itemgetter
 
 reminders = importlib.import_module('reminders')
 
@@ -67,7 +67,7 @@ class Store:
         cacheOut = []
         pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
         for reminder in self.__reminders:
-            print(reminder)
+        #    print(reminder)
             cacheOut.append(reminder)
         pickle.dump(cacheOut, pickle_out)
         pickle_out.close()
@@ -76,9 +76,9 @@ class Store:
         pickle_in = open((f"{fileName}.pickle"), "rb") #rb = readable
         importedReminders = pickle.load(pickle_in)
 
-        for reminder in importedReminders:
-            print(reminder)
-        print(importedReminders)
+        # for reminder in importedReminders:
+        #     print(reminder)
+        # print(importedReminders)
 
         if self.__reminders == []:
             currentHighestLocalID = 0
@@ -108,17 +108,15 @@ class Store:
                             nextID = nextID + 1
         else:
             for importedReminder in importedReminders:
-                print(importedReminder)
+                #print(importedReminder)
                 setCache.append(importedReminder)
                 nextID = nextID + 1
             nextID = nextID - 1
         
-        print(setCache)
+        #sort order of reminders after merge
+        setCache.sort(key=lambda x: x._id)
+        #print(setCache)
         self.__reminders = setCache
         
         #sync up the auto-incrementingID generator in reminders
         reminders.resource_cl.setGenerator(nextID)
-
-
-
-
