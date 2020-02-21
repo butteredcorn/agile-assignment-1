@@ -1,7 +1,11 @@
 import itertools
 
-#generate unique id
+"""
+Itertools class used to generate an auto-incrementing ID
+Depends on: itertools module
+"""
 class resource_cl():
+    #generate unique id
     id_generator = itertools.count()
 
     @classmethod
@@ -12,9 +16,14 @@ class resource_cl():
         self._id = next(self.id_generator)
 
 
-#reminders have id, text, tags
+"""
+Reminders class used to create Reminder objects
+Parent class: resource_cl()
+"""
 class Reminder(resource_cl):
 
+    #reminders have id, text, tags
+    #reminder.__dict__ in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
     def __init__(self, text, tags = ""):
         super().__init__()
         self.__text = text

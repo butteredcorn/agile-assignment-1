@@ -5,27 +5,30 @@ from operator import itemgetter
 
 reminders = importlib.import_module('reminders')
 
-
-
+"""
+Class for storing, searching, and importing/exporting reminders
+Depends on: reminders.py
+"""
 class Store:
 
+    #reminder objects stored in a list
     def __init__(self):
         self.__reminders = []
 
-    #reminder array
+    #returns an array of strings describing reminder objects in the Store
+    #reminder.__dict__ in the format of {'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}
     @property
     def reminders(self):
         dict_cache = []
         for reminder in self.__reminders:
             dict_cache.append(f"Reminder ID: {reminder.id} | Tags: {reminder.tags}\nDescription: {reminder.text}\n")
-        #note that reminder.__dict__ in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
         return dict_cache
 
+    #add reminder object to the Store list
     def addReminder(self, reminder):
         self.__reminders.append(reminder)
 
-
-    #[{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
+    #search through Store list and return matching Reminder objects, if found
     def search(self, tag = None, text = None, both = None):
         if tag is None and text is None and both is None:
             raise ValueError("Non-Permissible Search Parameters: Not all three fields can be None.")
@@ -54,6 +57,7 @@ class Store:
                     searchCache.append(reminder)   
             return searchCache
 
+    #search through Store list by ID and modify that reminder
     def searchByID(self, reminderID):
         if reminderID and isinstance(int(reminderID), int):
 
@@ -63,6 +67,7 @@ class Store:
         else:
             return print("Error: Please enter an integer only.")
 
+    #export Store list to root directory as pickle file
     def exportToPickle(self, fileName):
         cacheOut = []
         pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
@@ -72,6 +77,10 @@ class Store:
         pickle.dump(cacheOut, pickle_out)
         pickle_out.close()
 
+    #import pickle file from root directory
+    #   - will take care of merge conflicts
+    #   - will reset Reminders.resource_cl ID generator
+    #   - will sort reminders after merge by ID
     def importFromPickle(self, fileName):
         pickle_in = open((f"{fileName}.pickle"), "rb") #rb = readable
         importedReminders = pickle.load(pickle_in)
