@@ -6,10 +6,18 @@ database = importlib.import_module('database')
 #initialize database
 store = database.Store()
 
+"""
+Reminder Engine class used to create functionalities expected of an application that creates, modifies, and stores reminders
+    - user inputs are handled in this class
+    - errors are handled in this class
+Depends on: reminders.py and database.py
+"""
 class ReminderEngine:
+
     def __init__(self):
         pass
 
+    #print menu
     def remindersMenu(self):
         print('\n    Reminders menu:\n')
         print('    1. show all reminders')
@@ -20,6 +28,7 @@ class ReminderEngine:
         print('    6. import reminders')
         print('    7. quit\n')
 
+    #return list of reminders in Store list
     def getReminderList(self):
         if store.reminders == []:
             print("\nYou don't have any reminders! Create some with option 3.")
@@ -28,6 +37,7 @@ class ReminderEngine:
             for eachReminder in store.reminders:
                 print(f"{eachReminder}")
 
+    #request user input for how to search
     def querySearchParameter(self):
         searchParameter = input("How would you like to search, by 1: tag, 2: text, or 3: both? ")
         if searchParameter == "1":
@@ -42,16 +52,20 @@ class ReminderEngine:
         else:
             print("Please enter a valid option.")
             self.querySearchParameter()
-
-    #if all args are None, raise Error
+   
+    #call search function in database after receiving user input for option from querySearchParameter()
     def searchDatabase(self, tag = None, text = None, both = None):
+        #note: database will throw error if all fields passed in are None,
+        #      however, this is redundant as querySearchParameter() handles the errors.
         result = store.search(tag, text, both)
-        if result is None:
-            print("No matches were found.")
+        if result == []:
+            print("\nNo matches were found.")
         else:
+            print("")
             for eachResult in result:
                 print(f"Reminder ID: {eachResult.id} | Tags: {eachResult.tags}\nDescription: {eachResult.text}\n")
 
+    #create a new reminder and store it in Store list
     def createReminder(self):
         #ask for user inputted reminder description
         reminderText = input('Create a reminder description: ')
@@ -77,7 +91,7 @@ class ReminderEngine:
         store.addReminder(newReminder)
         print(f"\nNew reminder with description '{newReminder.text}' added with ID {newReminder.id}!")
 
-
+    #modify an existing reminder in Store list
     def modifyReminderByID(self):
         selectedID = input('Please enter the reminder ID: ')
         selectedReminder = store.searchByID(selectedID)
@@ -96,16 +110,16 @@ class ReminderEngine:
         newTags = input('Please enter new tags: ')
 
         if newTags == "":
-            newTags = None
+            print("Tags were not updated.")
         elif ' ' in newTags and '.' not in newTags:
             return print("Error: Please separate tags with a comma.")
 
         if newTags != "":
+            newTags = [tag.strip() for tag in newTags.split(',')]
             selectedReminder.tags = newTags
             print(f"\nReminder {selectedReminder.id}'s tags has been updated to '{selectedReminder.tags}'.")
-        else:
-            print("Tags were not updated.")
 
+    #ask for user input for filename and export to pickle file
     def exportReminders(self):
         fileName = input("Filename to save to? Do not enter any extension: ")
         if '.' in fileName:
@@ -117,6 +131,7 @@ class ReminderEngine:
             except:
                 print(f"Sorry, but we could not write to '{fileName}'")
 
+    #ask for user input for filename and import from pickle file
     def importReminders(self):
         fileName = input("Filename to open from? Do not enter any extension: ")
         #store.importFromPickle(fileName)

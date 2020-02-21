@@ -1,3 +1,10 @@
+"""
+@author  - Justin Yee
+@version - 1.0
+
+This is an application that creates, stores, exports, imports reminders.
+"""
+
 import importlib
 
 reminders = importlib.import_module('reminders')
@@ -8,6 +15,7 @@ engine = importlib.import_module('reminder-engine')
 app = engine.ReminderEngine()
 appOn = True
 
+#run application and handle user input for menu options
 while(appOn):
     app.remindersMenu()
     userSelection = input("Select option: ")
