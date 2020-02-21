@@ -50,12 +50,20 @@ class ReminderEngine:
     def createReminder(self):
         #ask for user inputted reminder description
         reminderText = input('Create a reminder description: ')
+        if reminderText == "":
+            return print("Error: Empty descriptions are not allowed for reminders. Please enter a description.")
 
         #ask for user inputted tags for reminder
-        reminderTags = input('Add some tags? Separate tags with a comma: ')
+        reminderTags = input('Add some tags? Separate tags with a comma. To join words for a tag, use a hyphen: ')
         if reminderTags == "":
             reminderTags = None
-        formattedTags = [tag.strip() for tag in reminderTags.split(',')]
+        elif ' ' in reminderTags and '.' not in reminderTags:
+            return print("Error: Please separate tags with a comma.")
+        
+        if reminderTags == None:
+            formattedTags = None #pass None if no tags are specified
+        else:
+            formattedTags = [tag.strip() for tag in reminderTags.split(',')]
 
         #create reminder by calling Reminder in reminders.py
         newReminder = reminders.Reminder(reminderText, formattedTags)
@@ -68,14 +76,25 @@ class ReminderEngine:
     def modifyReminderByID(self):
         selectedID = input('Please enter the reminder ID: ')
         selectedReminder = store.searchByID(selectedID)
+        if selectedReminder is None:
+            return print("No such ID exists.")
         #print(selectedReminder.__dict__)
         print(f"\nCurrently, reminder {selectedReminder.id} is set to '{selectedReminder.text}'.")
 
         newDescription = input("Please enter the new description: ")
+        if newDescription == "":
+            return print("Error: Empty descriptions are not allowed for reminders. Please enter a description.")
+
         selectedReminder.text = newDescription
         print(f"\nReminder {selectedReminder.id}'s description has been updated to '{selectedReminder.text}'.")
 
         newTags = input('Please enter new tags: ')
+
+        if newTags == "":
+            newTags = None
+        elif ' ' in newTags and '.' not in newTags:
+            return print("Error: Please separate tags with a comma.")
+
         if newTags != "":
             selectedReminder.tags = newTags
             print(f"\nReminder {selectedReminder.id}'s tags has been updated to '{selectedReminder.tags}'.")
