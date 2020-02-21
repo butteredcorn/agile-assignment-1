@@ -113,9 +113,8 @@ class Store:
         print(setCache)
         self.__reminders = setCache
         
-        #sync up the auto-incrementingID generator
-        #reminders.resource_cl.setGenerator(nextID)
-        reminders.resource_cl.id_generator = itertools.count(nextID)
+        #sync up the auto-incrementingID generator in reminders
+        reminders.resource_cl.setGenerator(nextID)
 
 
 

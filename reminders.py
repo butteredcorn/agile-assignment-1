@@ -6,7 +6,7 @@ class resource_cl():
 
     @classmethod
     def setGenerator(cls, newCount):
-        id_generator = itertools.count(newCount)
+        resource_cl.id_generator = itertools.count(newCount)
 
     def __init__(self):
         self._id = next(self.id_generator)
