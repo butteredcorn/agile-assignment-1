@@ -1,7 +1,7 @@
 import pickle
 import importlib
 import itertools
-
+from operator import itemgetter
 
 reminders = importlib.import_module('reminders')
 
@@ -17,7 +17,9 @@ class Store:
     def reminders(self):
         dict_cache = []
         for reminder in self.__reminders:
-            dict_cache.append(reminder.__dict__)
+            #dict_cache.append(reminder.__dict__)
+            dict_cache.append(f"Reminder ID: {reminder.id} | Tags: {reminder.tags}\nDescription: {reminder.text}\n")
+
         #return __dict__ just for display purposes
         return dict_cache #in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
 
@@ -34,14 +36,16 @@ class Store:
             for reminder in self.__reminders:
                 for eachTag in reminder._Reminder__tags:
                     if eachTag == tag:
-                        searchCache.append(reminder.__dict__)    
+                        #searchCache.append(reminder.__dict__)
+                        searchCache.append(reminder)      
             return searchCache #return __dict__ just for display purposes
 
         elif (text):
             searchCache = []
             for reminder in self.__reminders:
                 if text in reminder._Reminder__text:
-                    searchCache.append(reminder.__dict__)
+                    #searchCache.append(reminder.__dict__)
+                    searchCache.append(reminder)   
             return searchCache #return __dict__ just for display purposes
 
         elif (both):
@@ -49,9 +53,11 @@ class Store:
             searchCache = []
             for reminder in self.__reminders:
                 if reminder._Reminder__tags == both:
-                    searchCache.append(reminder.__dict__)
+                    #searchCache.append(reminder.__dict__)
+                    searchCache.append(reminder)   
                 elif both in reminder._Reminder__text:
-                    searchCache.append(reminder.__dict__)
+                    #searchCache.append(reminder.__dict__)
+                    searchCache.append(reminder)   
             return searchCache
 
     def searchByID(self, reminderID):
@@ -67,7 +73,7 @@ class Store:
         cacheOut = []
         pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
         for reminder in self.__reminders:
-            print(reminder)
+        #    print(reminder)
             cacheOut.append(reminder)
         pickle.dump(cacheOut, pickle_out)
         pickle_out.close()
@@ -76,9 +82,9 @@ class Store:
         pickle_in = open((f"{fileName}.pickle"), "rb") #rb = readable
         importedReminders = pickle.load(pickle_in)
 
-        for reminder in importedReminders:
-            print(reminder)
-        print(importedReminders)
+        # for reminder in importedReminders:
+        #     print(reminder)
+        # print(importedReminders)
 
         if self.__reminders == []:
             currentHighestLocalID = 0
@@ -108,17 +114,15 @@ class Store:
                             nextID = nextID + 1
         else:
             for importedReminder in importedReminders:
-                print(importedReminder)
+                #print(importedReminder)
                 setCache.append(importedReminder)
                 nextID = nextID + 1
             nextID = nextID - 1
         
-        print(setCache)
+        #sort order of reminders after merge
+        setCache.sort(key=lambda x: x._id)
+        #print(setCache)
         self.__reminders = setCache
         
         #sync up the auto-incrementingID generator in reminders
         reminders.resource_cl.setGenerator(nextID)
-
-
-
-
