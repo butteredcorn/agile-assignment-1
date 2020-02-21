@@ -32,6 +32,8 @@ class Store:
     def search(self, tag = None, text = None, both = None):
         if tag is None and text is None and both is None:
             raise ValueError("Non-Permissible Search Parameters: Not all three fields can be None.")
+        elif tag == "" or text == "" or both == "":
+            raise ValueError("Non-Permissible Search Parameters: Search parameter cannot be empty string.")
         elif (tag):
             searchCache = []
             for reminder in self.__reminders:
