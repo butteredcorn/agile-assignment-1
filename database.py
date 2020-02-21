@@ -17,7 +17,9 @@ class Store:
     def reminders(self):
         dict_cache = []
         for reminder in self.__reminders:
-            dict_cache.append(reminder.__dict__)
+            #dict_cache.append(reminder.__dict__)
+            dict_cache.append(f"Reminder ID: {reminder.id} | Tags: {reminder.tags}\nDescription: {reminder.text}\n")
+
         #return __dict__ just for display purposes
         return dict_cache #in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
 
