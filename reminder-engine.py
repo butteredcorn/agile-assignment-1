@@ -47,7 +47,7 @@ class ReminderEngine:
             searchTerm = input("Please enter the exact word or phrase you would like to search: ")
             self.searchDatabase(None, searchTerm)
         elif searchParameter == "3":
-            searchTerm = input("Please enter the name of the tag or the exact word or phase you would like to earch: ")
+            searchTerm = input("Please enter the name of the tag or the exact word or phase you would like to search: ")
             self.searchDatabase(None, None, searchTerm)
         else:
             print("Please enter a valid option.")
@@ -58,7 +58,7 @@ class ReminderEngine:
         #note: database will throw error if all fields passed in are None,
         #      however, this is redundant as querySearchParameter() handles the errors.
         result = store.search(tag, text, both)
-        if result == []:
+        if result == [] or result is None:
             print("\nNo matches were found.")
         else:
             print("")
@@ -121,9 +121,9 @@ class ReminderEngine:
 
     #ask for user input for filename and export to pickle file
     def exportReminders(self):
-        fileName = input("Filename to save to? Do not enter any extension: ")
-        if '.' in fileName:
-            print("Please enter a valid filename.")
+        fileName = input("Filename to save to? Do not enter any extension or spaces: ")
+        if '.' in fileName or ' ' in fileName:
+            print("\nPlease enter a valid filename.")
         else:
             try:
                 store.exportToPickle(fileName)
