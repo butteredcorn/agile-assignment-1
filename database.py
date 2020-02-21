@@ -56,9 +56,12 @@ class Store:
 
     def searchByID(self, reminderID):
         if reminderID and isinstance(int(reminderID), int):
+
             for reminder in self.__reminders:
                 if reminder._id == int(reminderID):
                     return reminder
+        else:
+            return print("Error: Please enter an integer only.")
 
     def exportToPickle(self, fileName):
         cacheOut = []
