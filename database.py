@@ -17,11 +17,9 @@ class Store:
     def reminders(self):
         dict_cache = []
         for reminder in self.__reminders:
-            #dict_cache.append(reminder.__dict__)
             dict_cache.append(f"Reminder ID: {reminder.id} | Tags: {reminder.tags}\nDescription: {reminder.text}\n")
-
-        #return __dict__ just for display purposes
-        return dict_cache #in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
+        #note that reminder.__dict__ in the format of: [{'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}]
+        return dict_cache
 
     def addReminder(self, reminder):
         self.__reminders.append(reminder)
@@ -34,17 +32,15 @@ class Store:
         elif (tag):
             searchCache = []
             for reminder in self.__reminders:
-                for eachTag in reminder._Reminder__tags:
+                for eachTag in reminder.tags:
                     if eachTag == tag:
-                        #searchCache.append(reminder.__dict__)
                         searchCache.append(reminder)      
-            return searchCache #return __dict__ just for display purposes
+            return searchCache #return the whole reminder, engine can parse
 
         elif (text):
             searchCache = []
             for reminder in self.__reminders:
-                if text in reminder._Reminder__text:
-                    #searchCache.append(reminder.__dict__)
+                if text in reminder.text:
                     searchCache.append(reminder)   
             return searchCache #return __dict__ just for display purposes
 
@@ -52,11 +48,9 @@ class Store:
             #note that both is the search term, the option to choose both is handled in the ReminderEngine
             searchCache = []
             for reminder in self.__reminders:
-                if reminder._Reminder__tags == both:
-                    #searchCache.append(reminder.__dict__)
+                if reminder.tags == both:
                     searchCache.append(reminder)   
-                elif both in reminder._Reminder__text:
-                    #searchCache.append(reminder.__dict__)
+                elif both in reminder.text:
                     searchCache.append(reminder)   
             return searchCache
 
@@ -64,7 +58,7 @@ class Store:
         if reminderID and isinstance(int(reminderID), int):
 
             for reminder in self.__reminders:
-                if reminder._id == int(reminderID):
+                if reminder.id == int(reminderID):
                     return reminder
         else:
             return print("Error: Please enter an integer only.")
@@ -89,7 +83,7 @@ class Store:
         if self.__reminders == []:
             currentHighestLocalID = 0
         else:
-            currentHighestLocalID = int((self.__reminders[-1])._id)
+            currentHighestLocalID = int((self.__reminders[-1]).id)
 
         nextID = currentHighestLocalID + 1
 
@@ -103,13 +97,13 @@ class Store:
         if len(setCache) != 0:
             for importedReminder in importedReminders:
                 for localReminder in setCache:
-                    if importedReminder._id == localReminder._id:
-                        if importedReminder._Reminder__text == localReminder._Reminder__text and importedReminder._Reminder__tags == localReminder._Reminder__tags:
+                    if importedReminder.id == localReminder.id:
+                        if importedReminder.text == localReminder.text and importedReminder.tags == localReminder.tags:
                             #exact duplicate identified
                             continue
                         else:
                             #conflicting ids, but different reminders
-                            localReminder._id = nextID
+                            localReminder.id = nextID
                             setCache.append(importedReminder)
                             nextID = nextID + 1
         else:
