@@ -45,7 +45,12 @@ class ReminderEngine:
 
     #if all args are None, raise Error
     def searchDatabase(self, tag = None, text = None, both = None):
-        print(store.search(tag, text, both))
+        result = store.search(tag, text, both)
+        if result is None:
+            print("No matches were found.")
+        else:
+            for eachResult in result:
+                print(f"Reminder ID: {eachResult.id} | Tags: {eachResult.tags}\nDescription: {eachResult.text}\n")
 
     def createReminder(self):
         #ask for user inputted reminder description

@@ -36,14 +36,16 @@ class Store:
             for reminder in self.__reminders:
                 for eachTag in reminder._Reminder__tags:
                     if eachTag == tag:
-                        searchCache.append(reminder.__dict__)    
+                        #searchCache.append(reminder.__dict__)
+                        searchCache.append(reminder)      
             return searchCache #return __dict__ just for display purposes
 
         elif (text):
             searchCache = []
             for reminder in self.__reminders:
                 if text in reminder._Reminder__text:
-                    searchCache.append(reminder.__dict__)
+                    #searchCache.append(reminder.__dict__)
+                    searchCache.append(reminder)   
             return searchCache #return __dict__ just for display purposes
 
         elif (both):
@@ -51,9 +53,11 @@ class Store:
             searchCache = []
             for reminder in self.__reminders:
                 if reminder._Reminder__tags == both:
-                    searchCache.append(reminder.__dict__)
+                    #searchCache.append(reminder.__dict__)
+                    searchCache.append(reminder)   
                 elif both in reminder._Reminder__text:
-                    searchCache.append(reminder.__dict__)
+                    #searchCache.append(reminder.__dict__)
+                    searchCache.append(reminder)   
             return searchCache
 
     def searchByID(self, reminderID):
