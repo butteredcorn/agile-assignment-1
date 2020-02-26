@@ -6,6 +6,12 @@ database = importlib.import_module('database')
 #initialize database
 store = database.Store()
 
+search_paramters = {
+    "search by tag": "1",
+    "search by text": "2",
+    "search by both": "3"
+}
+
 """
 Reminder Engine class used to create functionalities expected of an application that creates, modifies, and stores reminders
     - user inputs are handled in this class
@@ -40,13 +46,13 @@ class ReminderEngine:
     #request user input for how to search
     def querySearchParameter(self):
         searchParameter = input("How would you like to search, by 1: tag, 2: text, or 3: both? ")
-        if searchParameter == "1":
+        if searchParameter == search_paramters["search by tag"]:
             searchTerm = input("Please enter the name of the tag: ")
             self.searchDatabase(searchTerm)
-        elif searchParameter == "2":
+        elif searchParameter == search_paramters["search by text"]:
             searchTerm = input("Please enter the exact word or phrase you would like to search: ")
             self.searchDatabase(None, searchTerm)
-        elif searchParameter == "3":
+        elif searchParameter == search_paramters["search by both"]:
             searchTerm = input("Please enter the name of the tag or the exact word or phase you would like to search: ")
             self.searchDatabase(None, None, searchTerm)
         else:
@@ -57,6 +63,8 @@ class ReminderEngine:
     def searchDatabase(self, tag = None, text = None, both = None):
         #note: database will throw error if all fields passed in are None,
         #      however, this is redundant as querySearchParameter() handles the errors.
+        if tag == "" or text == "" or both == "":
+            return print("\nCannot search empty string.")
         result = store.search(tag, text, both)
         if result == [] or result is None:
             print("\nNo matches were found.")

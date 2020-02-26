@@ -65,6 +65,26 @@ def test_search_throwsEmptyString():
     with pytest.raises(Exception) as e_info:
         store.search("", None, None)
 
+#test that searchByTag returns array of tags
+def test_searchByTag():
+    store.importFromPickle("import-test")
+    store_list = (store._Store__reminders)
+    result = store.search("a")
+    for eachResult in result:
+        #{'_id': 0, '_Reminder__text': 'a', '_Reminder__tags': ['a']}
+        result = eachResult.__dict__
+    assert result['_id'] == 0
+
+#test that searchByText returns array of tags
+def test_searchByText():
+    store.importFromPickle("import-test")
+    store_list = (store._Store__reminders)
+    result = store.search(None, 'a')
+    for eachResult in result:
+        #{'_id': 0, '_Reminder__text': 'a', '_Reminder__tags': ['a']}
+        result = eachResult.__dict__
+    assert result['_id'] == 0
+
 #test that exportToPickle handles empty strings, throws value error
 def test_exportToPickle_throwsEmptyString():
     with pytest.raises(Exception) as e_info:

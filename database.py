@@ -5,6 +5,16 @@ from operator import itemgetter
 
 reminders = importlib.import_module('reminders')
 
+constant = {
+    'empty_string': 0,
+    'first_id': 0,
+    'offset': 1
+}
+
+# print(constant['empty_string'])
+# print(constant['first_id'])
+# print(constant['offset'])
+
 """
 Class for storing, searching, and importing/exporting reminders
 Depends on: reminders.py
@@ -16,7 +26,7 @@ class Store:
         self.__reminders = []
 
     #returns an array of strings describing reminder objects in the Store
-    #reminder.__dict__ in the format of {'_id': 0, '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}
+    #reminder.__dict__ in the format of {'_id': constant['first_id'], '_Reminder__text': 'hello world', '_Reminder__tags': 'some tag'}
     @property
     def reminders(self):
         dict_cache = []
@@ -94,20 +104,20 @@ class Store:
         # print(importedReminders)
 
         if self.__reminders == []:
-            currentHighestLocalID = 0
+            currentHighestLocalID = constant['first_id']
         else:
             currentHighestLocalID = int((self.__reminders[-1]).id)
 
-        nextID = currentHighestLocalID + 1
+        nextID = currentHighestLocalID + constant['offset']
 
         setCache = []
 
-        if len(self.__reminders) != 0:
+        if len(self.__reminders) != constant['empty_string']:
             for localReminder in self.__reminders:
                 setCache.append(localReminder)
 
         
-        if len(setCache) != 0:
+        if len(setCache) != constant['empty_string']:
             for importedReminder in importedReminders:
                 for localReminder in setCache:
                     if importedReminder.id == localReminder.id:
@@ -118,13 +128,13 @@ class Store:
                             #conflicting ids, but different reminders
                             localReminder.id = nextID
                             setCache.append(importedReminder)
-                            nextID = nextID + 1
+                            nextID = nextID + constant['offset']
         else:
             for importedReminder in importedReminders:
                 #print(importedReminder)
                 setCache.append(importedReminder)
-                nextID = nextID + 1
-            nextID = nextID - 1
+                nextID = nextID + constant['offset']
+            nextID = nextID - constant['offset']
         
         #sort order of reminders after merge
         setCache.sort(key=lambda x: x._id)
@@ -133,3 +143,4 @@ class Store:
         
         #sync up the auto-incrementingID generator in reminders
         reminders.resource_cl.setGenerator(nextID)
+
