@@ -1,6 +1,6 @@
 """
 @author  - Justin Yee
-@version - 1.0
+@version - 1.1
 
 This is an application that creates, stores, exports, imports reminders.
 """
