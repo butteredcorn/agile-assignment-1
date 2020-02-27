@@ -46,7 +46,7 @@ class Store:
             raise ValueError("Non-Permissible Search Parameters: Not all three fields can be None.")
         elif tag == "" or text == "" or both == "":
             raise ValueError("Non-Permissible Search Parameters: Search parameter cannot be empty string.")
-        elif tag.lower() == "none":
+        elif tag and tag.lower() == "none":
             print("\nPlease be advised that reminders without tags cannot be searched by typing 'none'.")
         elif (tag):                
             searchCache = []
