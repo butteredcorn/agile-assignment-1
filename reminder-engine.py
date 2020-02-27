@@ -135,7 +135,6 @@ class ReminderEngine:
         else:
             try:
                 store.exportToPickle(fileName)
-                print(f"\nReminders have been exported to {fileName}.pickle.")
             except:
                 print(f"\nSorry, but we could not write to '{fileName}'")
 

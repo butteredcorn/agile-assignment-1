@@ -8,7 +8,9 @@ reminders = importlib.import_module('reminders')
 constant = {
     'empty_string': 0,
     'first_id': 0,
-    'offset': 1
+    'offset': 1,
+    'none': 0,
+    'increment': 1
 }
 
 # print(constant['empty_string'])
@@ -44,12 +46,17 @@ class Store:
             raise ValueError("Non-Permissible Search Parameters: Not all three fields can be None.")
         elif tag == "" or text == "" or both == "":
             raise ValueError("Non-Permissible Search Parameters: Search parameter cannot be empty string.")
-        elif (tag):
+        elif tag.lower() == "none":
+            print("\nPlease be advised that reminders without tags cannot be searched by typing 'none'.")
+        elif (tag):                
             searchCache = []
             for reminder in self.__reminders:
-                for eachTag in reminder.tags:
-                    if eachTag == tag:
-                        searchCache.append(reminder)      
+                if reminder.tags is None:
+                    continue
+                else:
+                    for eachTag in reminder.tags:
+                        if eachTag == tag:
+                            searchCache.append(reminder)  
             return searchCache #return the whole reminder, engine can parse
 
         elif (text):
@@ -63,10 +70,14 @@ class Store:
             #note that both is the search term, the option to choose both is handled in the ReminderEngine
             searchCache = []
             for reminder in self.__reminders:
-                if reminder.tags == both:
-                    searchCache.append(reminder)   
-                elif both in reminder.text:
-                    searchCache.append(reminder)   
+                if both in reminder.text:
+                    searchCache.append(reminder)  
+                elif reminder.tags is None:
+                    continue
+                else:
+                    for eachTag in reminder.tags:
+                        if eachTag == tag:
+                            searchCache.append(reminder)  
             return searchCache
 
     #search through Store list by ID and modify that reminder
@@ -83,13 +94,17 @@ class Store:
     def exportToPickle(self, fileName):
         if fileName == "":
             raise ValueError("Filename cannot be of type empty string.")
-        cacheOut = []
-        pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
-        for reminder in self.__reminders:
-        #    print(reminder)
-            cacheOut.append(reminder)
-        pickle.dump(cacheOut, pickle_out)
-        pickle_out.close()
+        if self.__reminders == []:
+            return print("\nNothing to export.")
+        else:
+            cacheOut = []
+            pickle_out = open(f"{fileName}.pickle", "wb") #wb = writable
+            for reminder in self.__reminders:
+            #    print(reminder)
+                cacheOut.append(reminder)
+            pickle.dump(cacheOut, pickle_out)
+            pickle_out.close()
+            print(f"\nReminders have been exported to {fileName}.pickle.")
 
     #import pickle file from root directory
     #   - will take care of merge conflicts
